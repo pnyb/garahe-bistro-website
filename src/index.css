@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    @apply bg-neutral-950 text-white;
+  }
+}
+
+@layer components {
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    @apply text-gold text-4xl md:text-5xl font-black tracking-tight;
+  }
+  .nav-link {
+    @apply text-neutral-300 hover:text-gold transition-colors duration-200 text-sm font-medium tracking-wide uppercase;
+  }
+  .btn-gold {
+    @apply bg-gold text-black font-semibold px-6 py-3 rounded-full hover:bg-gold-dark
+           transition-all duration-200 inline-flex items-center gap-2 text-sm;
+  }
+  .btn-outline {
+    @apply border border-white/30 text-white font-medium px-6 py-3 rounded-full
+           hover:border-gold hover:text-gold transition-all duration-200 inline-flex items-center gap-2 text-sm;
+  }
+}
+
+@layer utilities {
+  .text-gold    { color: #FFC50C; }
+  .bg-gold      { background-color: #FFC50C; }
+  .border-gold  { border-color: #FFC50C; }
+  .bg-gold-dark { background-color: #e6b200; }
+
+  .parallax {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  @media (max-width: 768px) {
+    .parallax { background-attachment: scroll; }
+  }
+
+  /* Scroll-triggered fade-up */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Messenger pulse ring — uses named keyframe from tailwind config */
+.messenger-pulse {
+  position: relative;
+}
+.messenger-pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: #0072ff;
+  animation: pulseRing 2s ease-out infinite;
+  z-index: -1;
+}
+
+/* in your global CSS or Tailwind config */
+.btn-outline-gold {
+  @apply border border-gold text-gold bg-transparent rounded-full px-8 py-3.5;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #FFC50C; border-radius: 3px; }
