@@ -10,13 +10,25 @@ export default function PromoBanner({ visible, onDismiss }) {
       <div className="flex-1 text-center">
         <span>{promoBanner.text}</span>
         
-        <a href={promoBanner.ctaUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ml-3 underline underline-offset-2 hover:opacity-70 transition-opacity"
-        >
-          {promoBanner.cta} →
-        </a>
+        <>
+    
+    {/* Mobile */}
+  
+    <a href="fb-messenger://user-thread/761108637425192"
+      className="ml-3 underline underline-offset-2 hover:opacity-70 transition-opacity md:hidden"
+    >
+      {promoBanner.cta} →
+    </a>
+    {/* Desktop */}
+    
+      <a href="https://www.facebook.com/messages/t/garahebistro"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="ml-3 underline underline-offset-2 hover:opacity-70 transition-opacity hidden md:inline"
+    >
+      {promoBanner.cta} →
+    </a>
+    </>
       </div>
       <button
         onClick={onDismiss}

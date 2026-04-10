@@ -6,6 +6,24 @@ import { openMessenger } from '../utils/messenger.js'
 function FloatingButtons() {
   const [showBackTop, setShowBackTop] = useState(false)
 
+  const floatingStyle = {
+    position: 'fixed',
+    bottom: '80px',
+    right: '20px',
+    zIndex: 99999,
+    width: '56px',
+    height: '56px',
+    borderRadius: '50%',
+    background: 'linear-gradient(135deg, #00c6ff, #0072ff)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    boxShadow: '0 4px 20px rgba(0,114,255,0.45)',
+    textDecoration: 'none',
+    transition: 'transform 0.2s ease',
+  }
+
   useEffect(() => {
     const onScroll = () => setShowBackTop(window.scrollY > 400)
     window.addEventListener('scroll', onScroll)
@@ -14,31 +32,29 @@ function FloatingButtons() {
 
   return (
     <>
-    <a href="fb-messenger://user-ref/garahebistro"
-      style={{
-        position: 'fixed',
-        bottom: '80px',
-        right: '20px',
-        zIndex: 99999,
-        width: '56px',
-        height: '56px',
-        borderRadius: '50%',
-        background: 'linear-gradient(135deg, #00c6ff, #0072ff)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        boxShadow: '0 4px 20px rgba(0,114,255,0.45)',
-        textDecoration: 'none',
-        transition: 'transform 0.2s ease',
-      }}
-      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-      aria-label="Chat with us on Messenger"
-    >
-      <MessengerIcon />
-    </a>
+      {/* Mobile — opens Messenger app */}
+      
+      <a href="fb-messenger://user-thread/YOUR_NUMERIC_ID"
+        className="messenger-pulse md:hidden"
+        style={floatingStyle}
+        aria-label="Chat with us on Messenger"
+      >
+        <MessengerIcon />
+      </a>
 
+      {/* Desktop — opens Messenger web */}
+      
+      <a href="https://www.facebook.com/messages/t/garahebistro"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="messenger-pulse hidden md:flex"
+        style={floatingStyle}
+        aria-label="Chat with us on Messenger"
+      >
+        <MessengerIcon />
+      </a>
+
+      {/* Back to top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         style={{

@@ -226,7 +226,7 @@ export default function Catering() {
     if (isDesktop) {
       window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
     } else {
-      window.location.href = `fb-messenger://user-ref/garahebistro?text=${msg}`
+      window.location.href = `fb-messenger://user-thread/761108637425192?text=${msg}`
     }
   }
 

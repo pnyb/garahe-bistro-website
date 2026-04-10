@@ -207,7 +207,7 @@ export const businessHours = {
 export const promoBanner = {
   text: '🎉 Summer Specials are here! Ask us about our seasonal dishes.',
   cta: 'Ask on Messenger',
-  ctaUrl: 'fb-messenger://user-ref/garahebistro',
+  ctaUrl: 'fb-messenger://user-thread/761108637425192',
 }
 
 export const FB_PAGE_ID = '761108637425192'
