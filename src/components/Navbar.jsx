@@ -1,6 +1,7 @@
 // src/components/Navbar.jsx
 import { useState, useEffect } from 'react'
 import { useIsOpen } from '../hooks/useIsOpen.js'
+import { openMessenger } from '../utils/messenger.js'
 import { promoBanner } from '../data/menu.js'
 
 const links = [
@@ -60,16 +61,13 @@ export default function Navbar({ bannerVisible }) {
             {isOpen ? 'Open Now' : 'Closed'}
           </span>
 
-          {/* Messenger CTA */}
-          <a
-            href="https://www.facebook.com/messages/t/garahebistro"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => openMessenger(null)}
             className="btn-gold text-xs py-2 px-4"
           >
             <MessengerIcon />
             Message Us
-          </a>
+          </button>
         </div>
 
         {/* Mobile hamburger */}
@@ -113,15 +111,13 @@ export default function Navbar({ bannerVisible }) {
               {isOpen ? 'Open Now' : 'Closed'}
             </span>
           </div>
-          <a
-            href="https://www.facebook.com/messages/t/garahebistro"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-gold justify-center"
+          <button
+            onClick={() => openMessenger(null)}
+            className="btn-gold justify-center w-full"
           >
             <MessengerIcon />
             Message Us on Messenger
-          </a>
+          </button>
         </div>
       </div>
     </nav>

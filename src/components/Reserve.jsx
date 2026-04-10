@@ -1,6 +1,7 @@
 // src/components/Reserve.jsx
 import { useState } from 'react'
 import { useFadeUp } from '../hooks/useFadeUp.js'
+import { openMessenger } from '../utils/messenger.js'
 
 const TIMES = [
   '10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM',
@@ -70,17 +71,19 @@ export default function Reserve() {
       return
     }
     const msg = buildMessage()
-    window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
+    openMessenger(msg)
   }
 
-  const inputCls = `w-full bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3
+  const inputCls = `w-full min-w-0 bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3
     placeholder-neutral-500 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold
-    transition-colors duration-200 text-sm`
+    transition-colors duration-200 text-sm box-border`
 
   const labelCls = `block text-neutral-400 text-xs font-semibold uppercase tracking-wider mb-1.5`
 
+
   return (
-    <section id="reserve" className="py-24 bg-neutral-950">
+    <section id="reserve" className="relative py-24 bg-neutral-950">
+    <div className="section-divider absolute top-0 left-0 right-0" />
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
@@ -130,7 +133,7 @@ export default function Reserve() {
                 <input
                   type="date" name="date" value={form.date}
                   onChange={handleChange} min={today}
-                  className={`${inputCls} [color-scheme:dark]`} required
+                  className={`${inputCls} [color-scheme:dark] max-w-full`} required
                   onInput={(e) => {
                     const picked = new Date(e.target.value + 'T00:00:00')
                     if (picked.getDay() === 0) {
@@ -216,7 +219,7 @@ export default function Reserve() {
         </p>
 
       </div>
-           
+          
     </section>
   )
 }

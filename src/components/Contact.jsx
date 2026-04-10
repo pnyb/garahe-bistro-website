@@ -6,7 +6,8 @@ export default function Contact() {
   const bodyRef  = useFadeUp()
 
   return (
-    <section id="contact" className="py-24 bg-neutral-900">
+    <section id="contact" className="relative py-24 bg-neutral-900">
+    <div className="section-divider absolute top-0 left-0 right-0" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         <div ref={titleRef} className="fade-up text-center mb-16">
@@ -54,15 +55,14 @@ export default function Contact() {
                   <FacebookIcon />
                   facebook.com/garahebistro
                 </a>
-                <a
-                  href="https://www.facebook.com/messages/t/garahebistro"
+                <a href="https://m.me/garahebistro"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-gold self-start mt-1"
                 >
-                  <MessengerIcon />
-                  Chat on Messenger
-                </a>
+                <MessengerIcon />
+                Chat on Messenger
+              </a>
               </div>
             </InfoBlock>
 

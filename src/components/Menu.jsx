@@ -43,7 +43,8 @@ export default function Menu() {
   const gridRef  = useFadeUp(0.05)
 
   return (
-    <section id="menu" className="py-24 bg-neutral-950">
+    <section id="menu" className="relative py-24 bg-neutral-950">
+    <div className="section-divider absolute top-0 left-0 right-0" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
@@ -76,6 +77,7 @@ export default function Menu() {
         </div>
 
       </div>
+    <div className="section-divider absolute bottom-0 left-0 right-0" />
     </section>
   )
 }

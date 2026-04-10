@@ -70,9 +70,15 @@
   z-index: -1;
 }
 
-/* in your global CSS or Tailwind config */
 .btn-outline-gold {
-  @apply border border-gold text-gold bg-transparent rounded-full px-8 py-3.5;
+  @apply border border-gold/70 text-gold bg-transparent font-medium rounded-full
+         px-6 py-3 inline-flex items-center gap-2 text-sm
+         hover:bg-gold/10 transition-all duration-200;
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #FFC50C40, transparent);
 }
 
 /* Custom scrollbar */

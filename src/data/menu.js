@@ -209,3 +209,6 @@ export const promoBanner = {
   cta: 'Ask on Messenger',
   ctaUrl: 'https://www.facebook.com/messages/t/garahebistro',
 }
+
+export const FB_PAGE_ID = '761108637425192'
+export const FB_USERNAME = 'garahebistro'

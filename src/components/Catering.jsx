@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useFadeUp } from '../hooks/useFadeUp.js'
 import { cateringPackages, cateringMenu } from '../data/menu.js'
+import { openMessenger } from '../utils/messenger.js'
 
 const CATEGORY_ICONS = {
   Chicken: '🍗',
@@ -217,9 +218,11 @@ export default function Catering() {
   const cardsRef = useFadeUp(0.05)
   const [selected, setSelected] = useState(cateringPackages[1])
 
+  
+
   function handleInquire() {
     const msg = buildCateringMessage(selected)
-    window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
+    openMessenger(msg)
   }
 
   return (
