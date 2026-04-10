@@ -222,7 +222,12 @@ export default function Catering() {
 
   function handleInquire() {
     const msg = buildCateringMessage(selected)
-    openMessenger(msg)
+    const isDesktop = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    if (isDesktop) {
+      window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
+    } else {
+      window.location.href = `fb-messenger://user-ref/garahebistro?text=${msg}`
+    }
   }
 
   return (

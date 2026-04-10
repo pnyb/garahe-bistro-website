@@ -14,34 +14,30 @@ function FloatingButtons() {
 
   return (
     <>
-      <button
-        onClick={() => openMessenger(null)}
-        className="messenger-pulse"
-        style={{
-          position: 'fixed',
-          bottom: '80px',
-          right: '20px',
-          zIndex: 99999,
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #00c6ff, #0072ff)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          boxShadow: '0 4px 20px rgba(0,114,255,0.45)',
-          border: 'none',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease',
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-        aria-label="Chat with us on Messenger"
-        title="Order via Messenger"
-      >
-        <MessengerIcon />
-      </button>
+    <a href="fb-messenger://user-ref/garahebistro"
+      style={{
+        position: 'fixed',
+        bottom: '80px',
+        right: '20px',
+        zIndex: 99999,
+        width: '56px',
+        height: '56px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #00c6ff, #0072ff)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        boxShadow: '0 4px 20px rgba(0,114,255,0.45)',
+        textDecoration: 'none',
+        transition: 'transform 0.2s ease',
+      }}
+      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      aria-label="Chat with us on Messenger"
+    >
+      <MessengerIcon />
+    </a>
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

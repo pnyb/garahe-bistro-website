@@ -71,7 +71,12 @@ export default function Reserve() {
       return
     }
     const msg = buildMessage()
-    openMessenger(msg)
+    const isDesktop = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    if (isDesktop) {
+      window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
+    } else {
+      window.location.href = `fb-messenger://user-ref/garahebistro?text=${msg}`
+    }
   }
 
   const inputCls = `w-full min-w-0 bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3

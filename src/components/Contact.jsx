@@ -1,5 +1,6 @@
 // src/components/Contact.jsx
 import { useFadeUp } from '../hooks/useFadeUp.js'
+import { openMessenger } from '../utils/messenger.js'
 
 export default function Contact() {
   const titleRef = useFadeUp()
@@ -55,14 +56,12 @@ export default function Contact() {
                   <FacebookIcon />
                   facebook.com/garahebistro
                 </a>
-                <a href="https://m.me/garahebistro"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <a href="fb-messenger://user-ref/garahebistro"
                   className="btn-gold self-start mt-1"
                 >
-                <MessengerIcon />
-                Chat on Messenger
-              </a>
+                  <MessengerIcon />
+                  Chat on Messenger
+                </a>
               </div>
             </InfoBlock>
 

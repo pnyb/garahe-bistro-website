@@ -26,5 +26,5 @@ export function openMessenger(textMsg) {
   }
 }
 
-export const MESSENGER_WEB_URL = `https://www.facebook.com/messages/t/garahebistro`
-export const MESSENGER_ME_URL = `https://m.me/garahebistro`
+export const MESSENGER_URL = 'fb-messenger://user-ref/garahebistro'
+export const MESSENGER_WEB_URL = 'https://www.facebook.com/messages/t/garahebistro'
