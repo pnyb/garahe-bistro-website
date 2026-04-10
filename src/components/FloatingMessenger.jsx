@@ -32,22 +32,16 @@ function FloatingButtons() {
 
   return (
     <>
-      {/* Mobile — opens Messenger app */}
-      
-      <a href="fb-messenger://user-thread/YOUR_NUMERIC_ID"
-        className="messenger-pulse md:hidden"
-        style={floatingStyle}
-        aria-label="Chat with us on Messenger"
-      >
-        <MessengerIcon />
-      </a>
+      {/* Single Messenger button — JS detects mobile vs desktop */}
 
-      {/* Desktop — opens Messenger web */}
-      
-      <a href="https://www.facebook.com/messages/t/garahebistro"
+      <a href={
+          /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+            ? 'fb-messenger://user-thread/761108637425192'
+            : 'https://www.facebook.com/messages/t/garahebistro'
+        }
         target="_blank"
         rel="noopener noreferrer"
-        className="messenger-pulse hidden md:flex"
+        className="messenger-pulse"
         style={floatingStyle}
         aria-label="Chat with us on Messenger"
       >

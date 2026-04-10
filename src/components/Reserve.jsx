@@ -75,13 +75,13 @@ export default function Reserve() {
     if (isDesktop) {
       window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
     } else {
-      window.location.href = `fb-messenger://user-thread/761108637425192?text=${msg}`
+      window.open(`fb-messenger://user-thread/761108637425192?text=${msg}`, '_blank')
     }
   }
 
   const inputCls = `w-full min-w-0 bg-neutral-800 border border-neutral-700 text-white rounded-xl px-4 py-3
-    placeholder-neutral-500 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold
-    transition-colors duration-200 text-sm box-border`
+      placeholder-neutral-500 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold
+      transition-colors duration-200 text-sm box-border appearance-none`
 
   const labelCls = `block text-neutral-400 text-xs font-semibold uppercase tracking-wider mb-1.5`
 
@@ -133,12 +133,13 @@ export default function Reserve() {
               </div>
 
               {/* Date */}
-              <div>
+              <div className="overflow-hidden">
                 <label className={labelCls}>Date <span className="text-gold">*</span></label>
                 <input
                   type="date" name="date" value={form.date}
                   onChange={handleChange} min={today}
-                  className={`${inputCls} [color-scheme:dark] max-w-full`} required
+                  className={`${inputCls} [color-scheme:dark]`} required
+                  style={{ width: '100%', display: 'block' }}
                   onInput={(e) => {
                     const picked = new Date(e.target.value + 'T00:00:00')
                     if (picked.getDay() === 0) {
