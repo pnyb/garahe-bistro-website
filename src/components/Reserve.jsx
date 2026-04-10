@@ -81,11 +81,7 @@ export default function Reserve() {
       const msg = buildMessage()
       window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
     } else {
-      // On mobile: show the summary on screen first, then open Messenger
       setSubmitted(true)
-      setTimeout(() => {
-        window.open('fb-messenger://user-thread/761108637425192', '_blank')
-      }, 300)
     }
   }
 
@@ -173,7 +169,7 @@ export default function Reserve() {
           setCopied(true)
           // After showing copied state, open Messenger then reset
           setTimeout(() => {
-            window.open('fb-messenger://user-thread/761108637425192', '_blank')
+            window.location.href = 'fb-messenger://user-thread/761108637425192'
           }, 800)
           setTimeout(() => setCopied(false), 3000)
         })
@@ -204,7 +200,7 @@ export default function Reserve() {
 
     {/* Manual open Messenger if copy already done */}
     <button
-      onClick={() => window.open('fb-messenger://user-thread/761108637425192', '_blank')}
+      onClick={() => window.location.href = 'fb-messenger://user-thread/761108637425192'}
       className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm
         border border-neutral-700 text-neutral-400 hover:border-gold/40 hover:text-gold
         transition-all duration-200 mb-4"

@@ -229,9 +229,6 @@ export default function Catering() {
       window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
     } else {
       setSubmitted(true)
-      setTimeout(() => {
-        window.open('fb-messenger://user-thread/761108637425192', '_blank')
-      }, 300)
     }
   }
   
@@ -333,7 +330,7 @@ export default function Catering() {
                 navigator.clipboard.writeText(text).then(() => {
                   setCopied(true)
                   setTimeout(() => {
-                    window.open('fb-messenger://user-thread/761108637425192', '_blank')
+                   window.location.href = 'fb-messenger://user-thread/761108637425192'
                   }, 800)
                   setTimeout(() => setCopied(false), 3000)
                 })
@@ -364,7 +361,7 @@ export default function Catering() {
 
             {/* Manual open */}
             <button
-              onClick={() => window.open('fb-messenger://user-thread/761108637425192', '_blank')}
+              onClick={() => window.location.href = 'fb-messenger://user-thread/761108637425192'}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm
                 border border-neutral-700 text-neutral-400 hover:border-gold/40 hover:text-gold
                 transition-all duration-200 mb-4"
@@ -398,7 +395,7 @@ export default function Catering() {
                 hover:shadow-gold/40 hover:scale-[1.02] transition-all duration-300"
             >
               <MessengerIcon />
-              Inquire — {selected.label} @ ₱{selected.price}/head
+              Inquire about {selected.label} via Messenger
             </button>
             <p className="text-neutral-600 text-xs mt-3">
               Opens Messenger with your selected package details.
