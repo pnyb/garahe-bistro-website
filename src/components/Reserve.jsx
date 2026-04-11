@@ -18,8 +18,6 @@ export default function Reserve() {
   const [error, setError] = useState('')
   const titleRef          = useFadeUp()
   const cardRef           = useFadeUp()
-  const [submitted, setSubmitted] = useState(false)
-  const [copied, setCopied] = useState(false)
   const today = new Date().toISOString().split('T')[0]
 
   function handleChange(e) {
@@ -30,6 +28,7 @@ export default function Reserve() {
   function buildSMSText() {
     return [
       `Hi! I'd like to reserve a table at Garahe Bistro.`,
+      `\n`,
       `Name: ${form.name}`,
       `Contact: ${form.phone}`,
       `Date: ${form.date}`,
@@ -37,6 +36,7 @@ export default function Reserve() {
       `Guests: ${form.guests}`,
       form.occasion ? `Occasion: ${form.occasion}` : null,
       form.notes    ? `Notes: ${form.notes}`       : null,
+      `\n`,
       `Please confirm if this slot is available. Thank you!`,
     ].filter(Boolean).join('\n')
   }
@@ -80,7 +80,10 @@ export default function Reserve() {
       const msg = buildMessage()
       window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
     } else {
-      setSubmitted(true)
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+      const sep = isIOS ? '&' : '?'
+      const text = buildSMSText()
+      window.location.href = `sms:+639174009233${sep}body=${encodeURIComponent(text)}`
     }
   }
 
@@ -117,120 +120,6 @@ export default function Reserve() {
 
        {/* Form card */}
         <div ref={cardRef} className="fade-up">
-          {submitted ? (
-  <div className="bg-neutral-900 border border-gold/30 rounded-3xl p-8 shadow-2xl">
-
-    {/* Header */}
-    <div className="text-center mb-6">
-      <div className="w-14 h-14 bg-gold/15 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg className="w-7 h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-      <h3 className="text-white font-bold text-xl mb-1">Almost there!</h3>
-      <p className="text-neutral-400 text-sm">
-        Copy your details below, then send them to us.
-      </p>
-    </div>
-
-    {/* Summary box */}
-    <div className="bg-neutral-800 border border-neutral-700 rounded-2xl p-5 mb-4">
-      <p className="text-gold text-xs font-bold uppercase tracking-wider mb-3">
-        Your Reservation Details
-      </p>
-      <div className="space-y-2 text-sm text-neutral-300">
-        <p><span className="text-neutral-500">Name:</span> {form.name}</p>
-        <p><span className="text-neutral-500">Contact:</span> {form.phone}</p>
-        <p><span className="text-neutral-500">Date:</span> {form.date}</p>
-        <p><span className="text-neutral-500">Time:</span> {form.time}</p>
-        <p><span className="text-neutral-500">Guests:</span> {form.guests}</p>
-        {form.occasion && <p><span className="text-neutral-500">Occasion:</span> {form.occasion}</p>}
-        {form.notes && <p><span className="text-neutral-500">Notes:</span> {form.notes}</p>}
-      </div>
-    </div>
-
-    {/* Copy button */}
-    <button
-      onClick={() => {
-        const text = [
-          `Hi! I'd like to reserve a table at Garahe Bistro :)`,
-          ``,``,
-          `Reservation Details:`,
-          `Name: ${form.name}`,
-          `Contact: ${form.phone}`,
-          `Date: ${form.date}`,
-          `Time: ${form.time}`,
-          `Guests: ${form.guests}`,
-          form.occasion ? `Occasion: ${form.occasion}` : null,
-          form.notes    ? `Notes: ${form.notes}`       : null,
-          ``,``,
-          `Please confirm if this slot is available. Thank you!`,
-        ].filter(Boolean).join('\n')
-
-        navigator.clipboard.writeText(text).then(() => {
-          setCopied(true)
-          // After showing copied state, open SMS then reset
-          setTimeout(() => {
-            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-            const sep = isIOS ? '&' : '?'
-            window.location.href = `sms:+639174009233${sep}body=${encodeURIComponent(buildSMSText())}`
-          }, 800)
-          setTimeout(() => setCopied(false), 3000)
-        })
-      }}
-      className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-semibold text-sm
-        transition-all duration-300 mb-3
-        ${copied
-          ? 'bg-green-500/20 border border-green-500/40 text-green-400'
-          : 'bg-gold text-black hover:bg-gold-dark'
-        }`}
-    >
-      {copied ? (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-          </svg>
-          Copied! Opening SMS…
-        </>
-      ) : (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          Copy & Send Details
-        </>
-      )}
-    </button>
-
-    {/* Manual open Messenger if copy already done */}
-    <button
-      onClick={() => openContact(null)}
-      className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm
-        border border-neutral-700 text-neutral-400 hover:border-gold/40 hover:text-gold
-        transition-all duration-200 mb-4"
-    >
-      <SMSIcon />
-      Open SMS Without Copying
-    </button>
-
-    {/* Close / start over */}
-    <div className="flex items-center justify-center gap-6 pt-2 border-t border-neutral-800">
-      <button
-        onClick={() => { setSubmitted(false); setCopied(false) }}
-        className="text-neutral-500 text-xs hover:text-neutral-300 transition-colors"
-      >
-        ← Edit details
-      </button>
-      <button
-        onClick={() => { setSubmitted(false); setForm(EMPTY); setCopied(false) }}
-        className="text-neutral-500 text-xs hover:text-red-400 transition-colors"
-      >
-        Cancel reservation
-      </button>
-    </div>
-
-  </div>
-                ) : (
                   <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-8 shadow-2xl">
                     <form onSubmit={handleSubmit} noValidate>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -323,7 +212,6 @@ export default function Reserve() {
 
                     </form>
                   </div>
-                )}
         </div>
 
         {/* Alternative contact note */}

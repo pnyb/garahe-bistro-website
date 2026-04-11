@@ -217,19 +217,25 @@ export default function Catering() {
   const titleRef = useFadeUp()
   const cardsRef = useFadeUp(0.05)
   const [selected, setSelected] = useState(cateringPackages[1])
-  const [submitted, setSubmitted] = useState(false)
-  const [copied, setCopied] = useState(false)
-
-  
 
   function handleInquire() {
-    if (!isMobile()) {
-      const msg = buildCateringMessage(selected)
-      window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
-    } else {
-      setSubmitted(true)
-    }
+  if (!isMobile()) {
+    const msg = buildCateringMessage(selected)
+    window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
+  } else {
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    const sep = isIOS ? '&' : '?'
+    const text = [
+      `Hi Garahe Bistro! I am interested in your catering service.`,
+      `\n`,
+      `Package: ${selected.label}`,
+      `Price: PHP ${selected.price}/head`,
+      `\n`,
+      `Please send me more details. Thank you!`,
+    ].join('\n')
+    window.location.href = `sms:+639174009233${sep}body=${encodeURIComponent(text)}`
   }
+}
   
   return (
     <section id="catering" className="relative py-24 overflow-hidden">
@@ -281,141 +287,23 @@ export default function Catering() {
 
 
       {/* Inquire CTA or Summary Card */}
-      <div className="mt-10">
-        {submitted ? (
-          <div className="bg-neutral-900 border border-gold/30 rounded-3xl p-8 shadow-2xl max-w-2xl mx-auto">
-
-            {/* Header */}
-            <div className="text-center mb-6">
-              <div className="w-14 h-14 bg-gold/15 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-7 h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h3 className="text-white font-bold text-xl mb-1">Almost there!</h3>
-              <p className="text-neutral-400 text-sm">
-                Copy your details below, then send them to us.
-              </p>
-            </div>
-
-            {/* Summary box */}
-            <div className="bg-neutral-800 border border-neutral-700 rounded-2xl p-5 mb-4">
-              <p className="text-gold text-xs font-bold uppercase tracking-wider mb-3">
-                Your Catering Inquiry
-              </p>
-              <div className="space-y-2 text-sm text-neutral-300">
-                <p><span className="text-neutral-500">Package:</span> {selected.label}</p>
-                <p><span className="text-neutral-500">Price:</span> ₱{selected.price}/head</p>
-                <p><span className="text-neutral-500">Minimum:</span> {selected.minHeads} guests</p>
-                <p><span className="text-neutral-500">Inclusions:</span> {selected.inclusions.join(', ')}</p>
-              </div>
-            </div>
-
-            {/* Copy button */}
-            <button
-              onClick={() => {
-                const text = [
-                  `Hi Garahe Bistro! I am interested in your catering service.`,
-                  ``,
-                  `Catering Inquiry:`,
-                  `Package: ${selected.label}`,
-                  `Price: PHP ${selected.price}/head`,
-                  `Minimum: ${selected.minHeads} guests`,
-                  `Inclusions: ${selected.inclusions.join(', ')}`,
-                  ``,``,
-                  `Please send me more details. Thank you!`,
-                ].join('\n')
-
-                navigator.clipboard.writeText(text).then(() => {
-                  setCopied(true)
-                  setTimeout(() => {
-                    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-                    const sep = isIOS ? '&' : '?'
-                    const text = [
-                      `Hi Garahe Bistro! I am interested in your catering service.`,
-                      ``,
-                      `Catering Inquiry:`,
-                      `Package: ${selected.label}`,
-                      `Price: PHP ${selected.price}/head`,
-                      `Minimum: ${selected.minHeads} guests`,
-                      `Inclusions: ${selected.inclusions.join(', ')}`,
-                      `Please send me more details. Thank you!`,
-                    ].join('\n')
-                    window.location.href = `sms:+639174009233${sep}body=${encodeURIComponent(text)}`
-                  }, 800)
-                  setTimeout(() => setCopied(false), 3000)
-                })
-              }}
-              className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-semibold text-sm
-                transition-all duration-300 mb-3
-                ${copied
-                  ? 'bg-green-500/20 border border-green-500/40 text-green-400'
-                  : 'bg-gold text-black hover:bg-gold-dark'
-                }`}
-            >
-              {copied ? (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Copied! Opening SMS…
-                </>
-              ) : (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                  Copy & Send Details
-                </>
-              )}
-            </button>
-
-            {/* Manual open */}
-            <button
-              onClick={() => openContact(null)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm
-                border border-neutral-700 text-neutral-400 hover:border-gold/40 hover:text-gold
-                transition-all duration-200 mb-4"
-            >
-              <MessengerIcon />
-              Open SMS Without Copying
-            </button>
-
-            {/* Close options */}
-            <div className="flex items-center justify-center gap-6 pt-2 border-t border-neutral-800">
-              <button
-                onClick={() => { setSubmitted(false); setCopied(false) }}
-                className="text-neutral-500 text-xs hover:text-neutral-300 transition-colors"
-              >
-                ← Change package
-              </button>
-              <button
-                onClick={() => { setSubmitted(false); setCopied(false) }}
-                className="text-neutral-500 text-xs hover:text-red-400 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-
-          </div>
-        ) : (
-          <div className="text-center">
-            <button
-              onClick={handleInquire}
-              className="btn-gold text-base px-10 py-4 rounded-2xl shadow-lg shadow-gold/20
-                hover:shadow-gold/40 hover:scale-[1.02] transition-all duration-300"
-            >
-              {isMobile() ? <SMSIcon /> : <MessengerIcon />}
-              Inquire about {selected.label}
-            </button>
-            <p className="text-neutral-600 text-xs mt-3">
-              {isMobile()
-                ? 'Text us with your package details.'
-                : 'Chat us with your package details.'
-              }
-            </p>
-          </div>
-        )}
+      {/* Inquire CTA */}
+      <div className="text-center mt-10">
+        <button
+          onClick={handleInquire}
+          className="btn-gold text-base px-10 py-4 rounded-2xl shadow-lg shadow-gold/20
+            hover:shadow-gold/40 hover:scale-[1.02] transition-all duration-300"
+        >
+          {isMobile() ? <SMSIcon /> : <MessengerIcon />}
+          Inquire about {selected.label}
+        </button>
+        {/* Alternative contact note */}
+        <p className="text-center text-neutral-600 text-sm mt-6">
+          Prefer to call?{' '}
+          <a href="tel:+639174009233" className="text-gold hover:underline font-medium">
+            0917 400 9233
+          </a>
+        </p>
       </div>
 
         {/* Expandable catering menu */}
