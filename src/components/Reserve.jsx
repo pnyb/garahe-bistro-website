@@ -108,7 +108,10 @@ export default function Reserve() {
           {/* How it works pill */}
           <div className="inline-flex items-center gap-2 mt-5 bg-neutral-800 border border-neutral-700 rounded-full px-5 py-2 text-xs text-neutral-400">
             <span className="text-gold font-bold">3 easy steps:</span>
-            Fill details → Open SMS → Get confirmation via text
+            {isMobile()
+              ? 'Fill details → Open SMS → Get confirmation via text'
+              : 'Fill details → Open Messenger → Get confirmation via chat'
+            }
           </div>
         </div>
 
@@ -151,7 +154,7 @@ export default function Reserve() {
       onClick={() => {
         const text = [
           `Hi! I'd like to reserve a table at Garahe Bistro :)`,
-          ``,
+          ``,``,
           `Reservation Details:`,
           `Name: ${form.name}`,
           `Contact: ${form.phone}`,
@@ -160,7 +163,7 @@ export default function Reserve() {
           `Guests: ${form.guests}`,
           form.occasion ? `Occasion: ${form.occasion}` : null,
           form.notes    ? `Notes: ${form.notes}`       : null,
-          ``,
+          ``,``,
           `Please confirm if this slot is available. Thank you!`,
         ].filter(Boolean).join('\n')
 
@@ -206,7 +209,7 @@ export default function Reserve() {
         border border-neutral-700 text-neutral-400 hover:border-gold/40 hover:text-gold
         transition-all duration-200 mb-4"
     >
-      <ContactIcon />
+      <SMSIcon />
       Open SMS Without Copying
     </button>
 
@@ -227,95 +230,100 @@ export default function Reserve() {
     </div>
 
   </div>
-              ) : (
-                <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-8 shadow-2xl">
-                  <form onSubmit={handleSubmit} noValidate>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                ) : (
+                  <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-8 shadow-2xl">
+                    <form onSubmit={handleSubmit} noValidate>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
-                      <div>
-                        <label className={labelCls}>Full Name <span className="text-gold">*</span></label>
-                        <input type="text" name="name" value={form.name}
-                          onChange={handleChange} placeholder="Juan dela Cruz"
-                          className={inputCls} required />
+                        <div>
+                          <label className={labelCls}>Full Name <span className="text-gold">*</span></label>
+                          <input type="text" name="name" value={form.name}
+                            onChange={handleChange} placeholder="Juan dela Cruz"
+                            className={inputCls} required />
+                        </div>
+
+                        <div>
+                          <label className={labelCls}>Contact Number <span className="text-gold">*</span></label>
+                          <input type="tel" name="phone" value={form.phone}
+                            onChange={handleChange} placeholder="09XX XXX XXXX"
+                            className={inputCls} required />
+                        </div>
+
+                        <div className="overflow-hidden">
+                          <label className={labelCls}>Date <span className="text-gold">*</span></label>
+                          <input type="date" name="date" value={form.date}
+                            onChange={handleChange} min={today}
+                            className={`${inputCls} [color-scheme:dark]`} required
+                            style={{ width: '100%', display: 'block' }}
+                            onInput={(e) => {
+                              const picked = new Date(e.target.value + 'T00:00:00')
+                              if (picked.getDay() === 0) {
+                                e.target.setCustomValidity('Sorry, we are closed on Sundays. Please pick another day.')
+                                e.target.reportValidity()
+                                setForm(f => ({ ...f, date: '' }))
+                              } else {
+                                e.target.setCustomValidity('')
+                              }
+                            }}
+                          />
+                        </div>
+
+                        <div>
+                          <label className={labelCls}>Time <span className="text-gold">*</span></label>
+                          <select name="time" value={form.time} onChange={handleChange} className={inputCls} required>
+                            <option value="" disabled>Select a time</option>
+                            {TIMES.map(t => <option key={t}>{t}</option>)}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className={labelCls}>Number of Guests <span className="text-gold">*</span></label>
+                          <select name="guests" value={form.guests} onChange={handleChange} className={inputCls} required>
+                            <option value="" disabled>How many?</option>
+                            {GUESTS.map(g => <option key={g}>{g}</option>)}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className={labelCls}>Occasion <span className="text-neutral-600">(optional)</span></label>
+                          <input type="text" name="occasion" value={form.occasion}
+                            onChange={handleChange} placeholder="Birthday, Anniversary…"
+                            className={inputCls} />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className={labelCls}>Special Requests <span className="text-neutral-600">(optional)</span></label>
+                          <textarea name="notes" value={form.notes}
+                            onChange={handleChange} rows={3}
+                            placeholder="Dietary restrictions, seating preference, etc."
+                            className={`${inputCls} resize-none`} />
+                        </div>
+
                       </div>
 
-                      <div>
-                        <label className={labelCls}>Contact Number <span className="text-gold">*</span></label>
-                        <input type="tel" name="phone" value={form.phone}
-                          onChange={handleChange} placeholder="09XX XXX XXXX"
-                          className={inputCls} required />
-                      </div>
+                      {error && (
+                        <p className="mt-4 text-red-400 text-sm text-center">{error}</p>
+                      )}
 
-                      <div className="overflow-hidden">
-                        <label className={labelCls}>Date <span className="text-gold">*</span></label>
-                        <input type="date" name="date" value={form.date}
-                          onChange={handleChange} min={today}
-                          className={`${inputCls} [color-scheme:dark]`} required
-                          style={{ width: '100%', display: 'block' }}
-                          onInput={(e) => {
-                            const picked = new Date(e.target.value + 'T00:00:00')
-                            if (picked.getDay() === 0) {
-                              e.target.setCustomValidity('Sorry, we are closed on Sundays. Please pick another day.')
-                              e.target.reportValidity()
-                              setForm(f => ({ ...f, date: '' }))
-                            } else {
-                              e.target.setCustomValidity('')
-                            }
-                          }}
-                        />
-                      </div>
-
-                      <div>
-                        <label className={labelCls}>Time <span className="text-gold">*</span></label>
-                        <select name="time" value={form.time} onChange={handleChange} className={inputCls} required>
-                          <option value="" disabled>Select a time</option>
-                          {TIMES.map(t => <option key={t}>{t}</option>)}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className={labelCls}>Number of Guests <span className="text-gold">*</span></label>
-                        <select name="guests" value={form.guests} onChange={handleChange} className={inputCls} required>
-                          <option value="" disabled>How many?</option>
-                          {GUESTS.map(g => <option key={g}>{g}</option>)}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className={labelCls}>Occasion <span className="text-neutral-600">(optional)</span></label>
-                        <input type="text" name="occasion" value={form.occasion}
-                          onChange={handleChange} placeholder="Birthday, Anniversary…"
-                          className={inputCls} />
-                      </div>
-
-                      <div className="sm:col-span-2">
-                        <label className={labelCls}>Special Requests <span className="text-neutral-600">(optional)</span></label>
-                        <textarea name="notes" value={form.notes}
-                          onChange={handleChange} rows={3}
-                          placeholder="Dietary restrictions, seating preference, etc."
-                          className={`${inputCls} resize-none`} />
-                      </div>
-
-                    </div>
-
-                    {error && (
-                      <p className="mt-4 text-red-400 text-sm text-center">{error}</p>
-                    )}
-
-                    <div className="mt-7 text-center">
-                      <button type="submit"
-                        className="btn-gold text-base px-10 py-4 rounded-2xl ...">
-                        <ContactIcon />
-                        Send Reservation
-                      </button>
+                      <div className="mt-7 text-center">
+                        <button
+                          type="submit"
+                          className="btn-gold text-base px-10 py-4 rounded-2xl shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-all duration-300 hover:scale-[1.02]"
+                        >
+                          {isMobile() ? <SMSIcon /> : <MessengerIcon />}
+                          {isMobile() ? 'Send via SMS' : 'Send via Messenger'}
+                        </button>
                       <p className="text-neutral-600 text-xs mt-4 leading-relaxed">
-                       ⚡Fast confirmation via SMS — no email needed
-                      </p>
-                    </div>
+                          {isMobile()
+                            ? '⚡ Fast confirmation via SMS — no email needed'
+                            : '⚡ Fast confirmation via chat — no email needed'
+                          }
+                        </p>
+                      </div>
 
-                  </form>
-                </div>
-              )}
+                    </form>
+                  </div>
+                )}
         </div>
 
         {/* Alternative contact note */}
@@ -340,7 +348,7 @@ function MessengerIcon() {
   )
 }
 
-function ContactIcon() {
+function SMSIcon() {
   return (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

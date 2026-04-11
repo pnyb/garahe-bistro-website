@@ -322,7 +322,7 @@ export default function Catering() {
                   `Price: PHP ${selected.price}/head`,
                   `Minimum: ${selected.minHeads} guests`,
                   `Inclusions: ${selected.inclusions.join(', ')}`,
-                  ``,
+                  ``,``,
                   `Please send me more details. Thank you!`,
                 ].join('\n')
 
@@ -405,11 +405,14 @@ export default function Catering() {
               className="btn-gold text-base px-10 py-4 rounded-2xl shadow-lg shadow-gold/20
                 hover:shadow-gold/40 hover:scale-[1.02] transition-all duration-300"
             >
-              <ContactIcon />
+              {isMobile() ? <SMSIcon /> : <MessengerIcon />}
               Inquire about {selected.label}
             </button>
             <p className="text-neutral-600 text-xs mt-3">
-              Text us with your selected package details.
+              {isMobile()
+                ? 'Text us with your package details.'
+                : 'Chat us with your package details.'
+              }
             </p>
           </div>
         )}
@@ -435,7 +438,7 @@ function MessengerIcon() {
   )
 }
 
-function ContactIcon() {
+function SMSIcon() {
   return (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
