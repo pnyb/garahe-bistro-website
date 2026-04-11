@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useFadeUp } from '../hooks/useFadeUp.js'
 import { cateringPackages, cateringMenu } from '../data/menu.js'
-import { openMessenger } from '../utils/messenger.js'
+import { openContact, isMobile } from '../utils/messenger.js'
 
 const CATEGORY_ICONS = {
   Chicken: '🍗',
@@ -223,8 +223,7 @@ export default function Catering() {
   
 
   function handleInquire() {
-    const isDesktop = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    if (isDesktop) {
+    if (!isMobile()) {
       const msg = buildCateringMessage(selected)
       window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
     } else {
@@ -295,7 +294,7 @@ export default function Catering() {
               </div>
               <h3 className="text-white font-bold text-xl mb-1">Almost there!</h3>
               <p className="text-neutral-400 text-sm">
-                Copy your details below, then send them to us on Messenger.
+                Copy your details below, then send them to us.
               </p>
             </div>
 
@@ -330,7 +329,19 @@ export default function Catering() {
                 navigator.clipboard.writeText(text).then(() => {
                   setCopied(true)
                   setTimeout(() => {
-                   window.location.href = 'fb-messenger://user-thread/761108637425192'
+                    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+                    const sep = isIOS ? '&' : '?'
+                    const text = [
+                      `Hi Garahe Bistro! I am interested in your catering service.`,
+                      ``,
+                      `Catering Inquiry:`,
+                      `Package: ${selected.label}`,
+                      `Price: PHP ${selected.price}/head`,
+                      `Minimum: ${selected.minHeads} guests`,
+                      `Inclusions: ${selected.inclusions.join(', ')}`,
+                      `Please send me more details. Thank you!`,
+                    ].join('\n')
+                    window.location.href = `sms:+639174009233${sep}body=${encodeURIComponent(text)}`
                   }, 800)
                   setTimeout(() => setCopied(false), 3000)
                 })
@@ -347,27 +358,27 @@ export default function Catering() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
-                  Copied! Opening Messenger…
+                  Copied! Opening SMS…
                 </>
               ) : (
                 <>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
-                  Copy & Open Messenger
+                  Copy & Send Details
                 </>
               )}
             </button>
 
             {/* Manual open */}
             <button
-              onClick={() => window.location.href = 'fb-messenger://user-thread/761108637425192'}
+              onClick={() => openContact(null)}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm
                 border border-neutral-700 text-neutral-400 hover:border-gold/40 hover:text-gold
                 transition-all duration-200 mb-4"
             >
               <MessengerIcon />
-              Open Messenger without copying
+              Open SMS Without Copying
             </button>
 
             {/* Close options */}
@@ -394,11 +405,11 @@ export default function Catering() {
               className="btn-gold text-base px-10 py-4 rounded-2xl shadow-lg shadow-gold/20
                 hover:shadow-gold/40 hover:scale-[1.02] transition-all duration-300"
             >
-              <MessengerIcon />
-              Inquire about {selected.label} via Messenger
+              <ContactIcon />
+              Inquire about {selected.label}
             </button>
             <p className="text-neutral-600 text-xs mt-3">
-              Opens Messenger with your selected package details.
+              Text us with your selected package details.
             </p>
           </div>
         )}
@@ -420,6 +431,15 @@ function MessengerIcon() {
   return (
     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 2C6.477 2 2 6.145 2 11.243c0 2.936 1.47 5.558 3.773 7.28V22l3.446-1.896c.92.254 1.894.39 2.781.39 5.523 0 10-4.145 10-9.251C22 6.145 17.523 2 12 2zm1.05 12.45l-2.549-2.72-4.973 2.72 5.473-5.812 2.612 2.72 4.91-2.72-5.473 5.812z"/>
+    </svg>
+  )
+}
+
+function ContactIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
     </svg>
   )
 }

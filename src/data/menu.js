@@ -203,11 +203,10 @@ export const businessHours = {
   closedDays: [0], // Sunday closed
 }
 
-// Promo banner — set to null to hide it
 export const promoBanner = {
   text: '🎉 Summer Specials are here! Ask us about our seasonal dishes.',
-  cta: 'Ask on Messenger',
-  ctaUrl: 'fb-messenger://user-thread/761108637425192',
+  cta: 'Message us on Facebook',
+  ctaUrl: null,
 }
 
 export const FB_PAGE_ID = '761108637425192'

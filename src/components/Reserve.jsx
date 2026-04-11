@@ -1,7 +1,7 @@
 // src/components/Reserve.jsx
 import { useState } from 'react'
 import { useFadeUp } from '../hooks/useFadeUp.js'
-import { openMessenger } from '../utils/messenger.js'
+import { openContact, isMobile } from '../utils/messenger.js'
 
 const TIMES = [
   '10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM',
@@ -27,20 +27,21 @@ export default function Reserve() {
     setError('')
   }
 
+  function buildSMSText() {
+    return [
+      `Hi! I'd like to reserve a table at Garahe Bistro.`,
+      `Name: ${form.name}`,
+      `Contact: ${form.phone}`,
+      `Date: ${form.date}`,
+      `Time: ${form.time}`,
+      `Guests: ${form.guests}`,
+      form.occasion ? `Occasion: ${form.occasion}` : null,
+      form.notes    ? `Notes: ${form.notes}`       : null,
+      `Please confirm if this slot is available. Thank you!`,
+    ].filter(Boolean).join('\n')
+  }
+
   function buildMessage() {
-    // const lines = [
-    //   `Hi Garahe Bistro! I'd like to reserve a table. 😊`,
-    //   ``,
-    //   `📋 *Reservation Details*`,
-    //   `👤 Name: ${form.name}`,
-    //   `📞 Contact: ${form.phone}`,
-    //   `📅 Date: ${form.date}`,
-    //   `🕐 Time: ${form.time}`,
-    //   `👥 Guests: ${form.guests}`,
-    //   form.occasion ? `🎉 Occasion: ${form.occasion}` : null,
-    //   form.notes    ? `📝 Notes: ${form.notes}`       : null,
-    // ].filter(Boolean).join('\n')
-    // return encodeURIComponent(lines)
     const lines = [
       `Hi! I’d like to reserve a table at Garahe Bistro :)`,
       ``,
@@ -75,9 +76,7 @@ export default function Reserve() {
     }
 
 
-    const isDesktop = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-
-    if (isDesktop) {
+    if (!isMobile()) {
       const msg = buildMessage()
       window.open(`https://www.facebook.com/messages/t/garahebistro?text=${msg}`, '_blank')
     } else {
@@ -109,7 +108,7 @@ export default function Reserve() {
           {/* How it works pill */}
           <div className="inline-flex items-center gap-2 mt-5 bg-neutral-800 border border-neutral-700 rounded-full px-5 py-2 text-xs text-neutral-400">
             <span className="text-gold font-bold">3 easy steps:</span>
-            Fill details → Open Messenger → Get confirmation via chat
+            Fill details → Open SMS → Get confirmation via text
           </div>
         </div>
 
@@ -127,7 +126,7 @@ export default function Reserve() {
       </div>
       <h3 className="text-white font-bold text-xl mb-1">Almost there!</h3>
       <p className="text-neutral-400 text-sm">
-        Copy your details below, then send them to us on Messenger.
+        Copy your details below, then send them to us.
       </p>
     </div>
 
@@ -167,9 +166,11 @@ export default function Reserve() {
 
         navigator.clipboard.writeText(text).then(() => {
           setCopied(true)
-          // After showing copied state, open Messenger then reset
+          // After showing copied state, open SMS then reset
           setTimeout(() => {
-            window.location.href = 'fb-messenger://user-thread/761108637425192'
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+            const sep = isIOS ? '&' : '?'
+            window.location.href = `sms:+639174009233${sep}body=${encodeURIComponent(buildSMSText())}`
           }, 800)
           setTimeout(() => setCopied(false), 3000)
         })
@@ -186,27 +187,27 @@ export default function Reserve() {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
           </svg>
-          Copied! Opening Messenger…
+          Copied! Opening SMS…
         </>
       ) : (
         <>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
-          Copy & Open Messenger
+          Copy & Send Details
         </>
       )}
     </button>
 
     {/* Manual open Messenger if copy already done */}
     <button
-      onClick={() => window.location.href = 'fb-messenger://user-thread/761108637425192'}
+      onClick={() => openContact(null)}
       className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm
         border border-neutral-700 text-neutral-400 hover:border-gold/40 hover:text-gold
         transition-all duration-200 mb-4"
     >
-      <MessengerIcon />
-      Open Messenger without copying
+      <ContactIcon />
+      Open SMS Without Copying
     </button>
 
     {/* Close / start over */}
@@ -303,12 +304,12 @@ export default function Reserve() {
 
                     <div className="mt-7 text-center">
                       <button type="submit"
-                        className="btn-gold text-base px-10 py-4 rounded-2xl shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-all duration-300 hover:scale-[1.02]">
-                        <MessengerIcon />
-                        Send via Messenger
+                        className="btn-gold text-base px-10 py-4 rounded-2xl ...">
+                        <ContactIcon />
+                        Send Reservation
                       </button>
                       <p className="text-neutral-600 text-xs mt-4 leading-relaxed">
-                        Fast confirmation via Messenger — no email needed
+                       ⚡Fast confirmation via SMS — no email needed
                       </p>
                     </div>
 
@@ -335,6 +336,15 @@ function MessengerIcon() {
   return (
     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 2C6.477 2 2 6.145 2 11.243c0 2.936 1.47 5.558 3.773 7.28V22l3.446-1.896c.92.254 1.894.39 2.781.39 5.523 0 10-4.145 10-9.251C22 6.145 17.523 2 12 2zm1.05 12.45l-2.549-2.72-4.973 2.72 5.473-5.812 2.612 2.72 4.91-2.72-5.473 5.812z"/>
+    </svg>
+  )
+}
+
+function ContactIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
     </svg>
   )
 }
