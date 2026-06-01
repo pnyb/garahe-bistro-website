@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { useState } from 'react'
 import PromoBanner       from './components/PromoBanner.jsx'
 import Navbar            from './components/Navbar.jsx'
@@ -29,6 +30,7 @@ export default function App() {
       </main>
       <Footer />
       <FloatingMessenger />
+      <Analytics />
     </>
   )
 }
